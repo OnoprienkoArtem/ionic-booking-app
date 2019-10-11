@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'edit-offer', loadChildren: './places/offers/edit-offer/edit-offer.module#EditOfferPageModule' },
   { path: 'place-detail', loadChildren: './places/discover/place-detail/place-detail.module#PlaceDetailPageModule' },
   { path: 'offer-bookings', loadChildren: './places/offers/offer-bookings/offer-bookings.module#OfferBookingsPageModule' },
+  { path: 'bookings', loadChildren: './bookings/bookings.module#BookingsPageModule' },
 ];
 
 @NgModule({
