@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PlacesService } from '../places.service';
+import { Place } from '../place.model';
 
 @Component({
   selector: 'app-offers',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OffersPage implements OnInit {
 
-  constructor() { }
+  offerPlaces: Place[];
+
+  constructor(private placesService: PlacesService) { }
 
   ngOnInit() {
+    this.offerPlaces = this.placesService.places;
   }
 
 }
