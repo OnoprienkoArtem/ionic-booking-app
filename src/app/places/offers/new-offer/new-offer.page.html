@@ -33,7 +33,7 @@
                     </ion-item>
                 </ion-col>
             </ion-row>
-            <ion-row *ngIf="form.get('description').valid && form.get('description').touched">
+            <ion-row *ngIf="!form.get('description').valid && form.get('description').touched">
                 <ion-col size-sm="6" offset-sm="3">
                     <p>Description must be between 1 and 180 characters.</p>
                 </ion-col>
