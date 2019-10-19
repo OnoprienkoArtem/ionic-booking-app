@@ -68,7 +68,7 @@ export class PlacesService {
             Math.random().toString(),
             title,
             description,
-            'https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200',
+            'https://png.pngtree.com/element_our/md/20180518/md_5afec7ee916c4.jpg',
             price,
             dateFrom,
             dateTo,
@@ -80,6 +80,31 @@ export class PlacesService {
             delay(1000),
             tap(places => {
                 this._places.next(places.concat(newPlace));
+            })
+        );
+    }
+
+    onUpdatePlace(placeId: string, title: string, description: string) {
+        return this.places.pipe(
+            take(1),
+            delay(1000),
+            tap(places => {
+                const updatedPlaceIndex = places.findIndex(
+                    pl => pl.id === placeId
+                );
+                const updatedPlaces = [...places];
+                const oldPlace = updatedPlaces[updatedPlaceIndex];
+                updatedPlaces[updatedPlaceIndex] = new Place(
+                    oldPlace.id,
+                    title,
+                    description,
+                    oldPlace.imageUrl,
+                    oldPlace.price,
+                    oldPlace.availableFrom,
+                    oldPlace.availableTo,
+                    oldPlace.userId
+                );
+                this._places.next(updatedPlaces);
             })
         );
     }
