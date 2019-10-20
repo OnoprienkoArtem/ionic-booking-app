@@ -8,10 +8,19 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-segment (ionChange)="onFilterUpdate($event)">
+    <ion-segment (ionChange)="onFilterUpdate($event.detail.value)">
         <ion-segment-button value="all" checked>All places</ion-segment-button>
         <ion-segment-button value="bookable">Bookable places</ion-segment-button>
     </ion-segment>
+
+
+    <ion-grid *ngIf="!relevantPlaces || relevantPlaces.length <= 0">
+        <ion-row>
+            <ion-col size="12" size-sm="8" offset-sm="2" text-center>
+                <p>There are no bookable places right now, please come back letter!</p>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
     <ion-grid *ngIf="relevantPlaces.length > 0">
         <ion-row>
@@ -37,7 +46,7 @@
             <ion-col size="12" size-sm="8" offset-sm="2" text-center>
 
                 <ion-list>
-                    <ion-item *ngFor="let place of loadedPlaces.slice(1)" routerDirection="backward" [routerLink]="['/', 'places', 'tabs', 'discover', place.id]" detail>
+                    <ion-item *ngFor="let place of loadedPlaces | slice:1" routerDirection="backward" [routerLink]="['/', 'places', 'tabs', 'discover', place.id]" detail>
                         <ion-thumbnail slot="start">
                             <ion-img [src]="place.imageUrl"></ion-img>
                         </ion-thumbnail>
@@ -50,7 +59,5 @@
 
             </ion-col>
         </ion-row>
-
-
     </ion-grid>
 </ion-content>
