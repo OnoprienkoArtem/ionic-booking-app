@@ -1,13 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ModalController, ActionSheetController } from '@ionic/angular';
+import {
+    NavController,
+    ModalController,
+    ActionSheetController,
+    LoadingController
+} from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 import { PlacesService } from '../../places.service';
 import { Place } from '../../place.model';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
 import { BookingService } from '../../../bookings/booking.service';
-
 
 @Component({
     selector: 'app-place-detail',
@@ -24,7 +28,8 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
         private placesService: PlacesService,
         private modalCtrl: ModalController,
         private actionSheetCtrl: ActionSheetController,
-        private bookingService: BookingService
+        private bookingService: BookingService,
+        private loadingCtrl: LoadingController
     ) {}
 
     ngOnInit() {
@@ -91,7 +96,26 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
                 console.log(resultData.data, resultData.role);
                 if (resultData.role === 'confirm') {
                     console.log('BOOKED!');
-                    this.bookingService.addBooking(this.place.id, this.place.title, this.place.imageUrl, );
+                    this.loadingCtrl
+                        .create({
+                            message: 'Booking place ...'
+                        })
+                        .then(loadingEl => {
+                            loadingEl.present();
+                            const data = resultData.data.bookingData;
+                            this.bookingService.addBooking(
+                                this.place.id,
+                                this.place.title,
+                                this.place.imageUrl,
+                                data.firstName,
+                                data.lastName,
+                                data.guestsNumber,
+                                data.startDate,
+                                data.endDate
+                            ).subscribe(() => {
+                                loadingEl.dismiss();
+                            });
+                        });
                 }
             });
     }
