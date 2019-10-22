@@ -12,7 +12,7 @@ import { Place } from '../place.model';
     styleUrls: ['./offers.page.scss']
 })
 export class OffersPage implements OnInit, OnDestroy {
-    offerPlaces: Place[];    
+    offerPlaces: Place[];
     isLoading = false;
     private placesSub: Subscription;
 
@@ -38,8 +38,8 @@ export class OffersPage implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-      if (this.placesSub) {
-        this.placesSub.unsubscribe();
-      }
+        if (this.placesSub) {
+            this.placesSub.unsubscribe();
+        }
     }
 }

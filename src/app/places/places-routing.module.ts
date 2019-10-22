@@ -36,10 +36,10 @@ const routes: Routes = [
             path: 'edit/:placeId',
             loadChildren: './offers/edit-offer/edit-offer.module#EditOfferPageModule'
           },
-          {
-            path: ':placeId',
-            loadChildren: './offers/offer-bookings/offer-bookings.module#OfferBookingsPageModule'
-          },
+          // {
+          //   path: ':placeId',
+          //   loadChildren: './offers/offer-bookings/offer-bookings.module#OfferBookingsPageModule'
+          // },
         ],
       },
       {
