@@ -15,6 +15,8 @@ import { Place } from '../../place.model';
 export class EditOfferPage implements OnInit, OnDestroy {
     form: FormGroup;
     offerPlaces: Place;
+    placeId: string;
+    isLoading = false;
     private placesSub: Subscription;
 
     constructor(
@@ -31,7 +33,8 @@ export class EditOfferPage implements OnInit, OnDestroy {
                 this.navController.navigateBack('/places/tabs/offers');
                 return;
             }
-
+            this.placeId = paramMap.get('placeId');
+            this.isLoading = true;
             this.placesSub = this.placesService
                 .getPlace(paramMap.get('placeId'))
                 .subscribe(place => {
@@ -53,6 +56,7 @@ export class EditOfferPage implements OnInit, OnDestroy {
                             }
                         )
                     });
+                    this.isLoading = false;
                 });
         });
     }

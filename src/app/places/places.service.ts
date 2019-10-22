@@ -63,12 +63,24 @@ export class PlacesService {
     constructor(private authService: AuthService, private http: HttpClient) {}
 
     getPlace(id: string) {
-        return this.places.pipe(
-            take(1),
-            map(places => {
-                return { ...places.find(p => p.id === id) };
-            })
-        );
+        return this.http
+            .get<PlaceData>(
+                `https://ionic-angular-booking-ap-f1811.firebaseio.com/offered-places/${id}.json`
+            )
+            .pipe(
+                map(placeData => {
+                    return new Place(
+                        id,
+                        placeData.title,
+                        placeData.description,
+                        placeData.imageUrl,
+                        placeData.price,
+                        new Date(placeData.availableFrom),
+                        new Date(placeData.availableTo),
+                        placeData.userId
+                    );
+                })
+            );
     }
 
     fetchPlaces() {
@@ -139,14 +151,6 @@ export class PlacesService {
                     this._places.next(places.concat(newPlace));
                 })
             );
-
-        // return this.places.pipe(
-        //     take(1),
-        //     delay(1000),
-        //     tap(places => {
-        //         this._places.next(places.concat(newPlace));
-        //     })
-        // );
     }
 
     onUpdatePlace(placeId: string, title: string, description: string) {
