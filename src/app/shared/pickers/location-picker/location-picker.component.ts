@@ -3,21 +3,20 @@ import { ModalController } from '@ionic/angular';
 import { MapModalComponent } from '../../map-modal/map-modal.component';
 
 @Component({
-  selector: 'app-location-picker',
-  templateUrl: './location-picker.component.html',
-  styleUrls: ['./location-picker.component.scss']
+    selector: 'app-location-picker',
+    templateUrl: './location-picker.component.html',
+    styleUrls: ['./location-picker.component.scss']
 })
 export class LocationPickerComponent implements OnInit {
+    constructor(private modalCtrl: ModalController) {}
 
-  constructor(private modalCtrl: ModalController) { }
+    ngOnInit() {}
 
-  ngOnInit() {
-  }
-
-  onPickLocation() {
-    this.modalCtrl.create({component: MapModalComponent}).then(modalEl => {
-      modalEl.present();
-    });
-  }
-
+    onPickLocation() {
+        this.modalCtrl
+            .create({ component: MapModalComponent })
+            .then(modalEl => {
+                modalEl.present();
+            });
+    }
 }
