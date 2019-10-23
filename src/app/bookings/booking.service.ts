@@ -81,15 +81,21 @@ export class BookingService {
     }
 
     cancelBooking(bookingId) {
-        return this.bookings.pipe(
-            take(1),
-            delay(1000),
-            tap(bookings => {
-                this._bookings.next(
-                    bookings.filter(booking => booking.id !== bookingId)
-                );
-            })
-        );
+        return this.http
+            .delete(
+                `https://ionic-angular-booking-ap-f1811.firebaseio.com/bookings/${bookingId}.json`
+            )
+            .pipe(
+                switchMap(() => {
+                    return this.bookings;
+                }),
+                take(1),
+                tap(bookings => {
+                    this._bookings.next(
+                        bookings.filter(booking => booking.id !== bookingId)
+                    );
+                })
+            );
     }
 
     fetchBooking() {
@@ -113,7 +119,7 @@ export class BookingService {
                                     bookingData[key].lastName,
                                     bookingData[key].guestNumber,
                                     new Date(bookingData[key].bookedFrom),
-                                    new Date(bookingData[key].bookedTo),
+                                    new Date(bookingData[key].bookedTo)
                                 )
                             );
                         }
