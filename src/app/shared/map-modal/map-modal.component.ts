@@ -28,14 +28,14 @@ export class MapModalComponent implements OnInit, AfterViewInit {
             .then(googleMaps => {
                 const mapEl = this.mapElementRef.nativeElement;
                 const map = new googleMaps.Map(mapEl, {
-                    center: { lat: -34.397, lng: 150.644 },
+                    center: { lat: 49.9935, lng: 36.2304 },
                     zoom: 16
                 });
                 googleMaps.event.addListenerOnce(map, 'idle', () => {
                     this.renderer.addClass(mapEl, 'visible');
                 });
 
-                map.addListenerOnce('click', event => {
+                map.addListener('click', event => {
                     const selectedCoords = {
                         lat: event.latLng.lat(),
                         lng: event.latLng.lng()
