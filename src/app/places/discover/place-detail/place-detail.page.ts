@@ -14,6 +14,7 @@ import { Place } from '../../place.model';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
 import { BookingService } from '../../../bookings/booking.service';
 import { AuthService } from '../../../auth/auth.service';
+import { MapModalComponent } from '../../../shared/map-modal/map-modal.component';
 
 @Component({
     selector: 'app-place-detail',
@@ -60,8 +61,7 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
                         this.alertCtrl
                             .create({
                                 header: 'An error occurred!',
-                                message:
-                                    'Could not load place.',
+                                message: 'Could not load place.',
                                 buttons: [
                                     {
                                         text: 'Okay',
@@ -153,6 +153,14 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
                                 });
                         });
                 }
+            });
+    }
+
+    onShowFullMap() {
+        this.modalCtrl
+            .create({ component: MapModalComponent })
+            .then(modalEl => {
+                modalEl.present();
             });
     }
 
