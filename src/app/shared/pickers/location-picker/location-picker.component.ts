@@ -1,8 +1,13 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { ModalController, ActionSheetController } from '@ionic/angular';
+import {
+    ModalController,
+    ActionSheetController,
+    AlertController
+} from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { Plugins, Capacitor } from '@capacitor/core';
 import { MapModalComponent } from '../../map-modal/map-modal.component';
 import { environment } from '../../../../environments/environment';
 import { PlaceLocation } from '../../../places/location.model';
@@ -20,7 +25,8 @@ export class LocationPickerComponent implements OnInit {
     constructor(
         private modalCtrl: ModalController,
         private http: HttpClient,
-        private actionSheetCtrl: ActionSheetController
+        private actionSheetCtrl: ActionSheetController,
+        private alertCtrl: AlertController
     ) {}
 
     ngOnInit() {}
@@ -30,9 +36,12 @@ export class LocationPickerComponent implements OnInit {
             .create({
                 header: 'Please Choose',
                 buttons: [
-                    { text: 'Auto-Locate', handler: () => {
-                        this.locateUser();
-                    } },
+                    {
+                        text: 'Auto-Locate',
+                        handler: () => {
+                            this.locateUser();
+                        }
+                    },
                     {
                         text: 'Pick on Map',
                         handler: () => {
@@ -48,7 +57,24 @@ export class LocationPickerComponent implements OnInit {
     }
 
     private locateUser() {
+        if (!Capacitor.isPluginAvailable('GeoLocation')) {
+            this.showErrorAlert();
+            return;
+        }
+        Plugins.Geolocation.getCurrentPosition()
+            .then()
+            .catch(err => {});
+    }
 
+    private showErrorAlert() {
+        this.alertCtrl
+            .create({
+                header: 'Could not fetch location',
+                message: 'Please use the map to pick a location!'
+            })
+            .then(alertEl => {
+                alertEl.present();
+            });
     }
 
     private openMap() {
