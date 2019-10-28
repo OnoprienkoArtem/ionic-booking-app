@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">booking-ionic-app</string>
     <string name="title_activity_main">booking-ionic-app</string>
-    <string name="package_name">booking.ionic.app</string>
-    <string name="fileprovider_authority">booking.ionic.app.fileprovider</string>
-    <string name="custom_url_scheme">booking.ionic.app</string>
+    <string name="package_name">com.bookingIonicApp</string>
+    <string name="fileprovider_authority">com.bookingIonicApp.fileprovider</string>
+    <string name="custom_url_scheme">com.bookingIonicApp</string>
 </resources>

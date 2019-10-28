@@ -1,5 +1,5 @@
 {
-  "appId": "booking.ionic.app",
+  "appId": "com.bookingIonicApp",
   "appName": "booking-ionic-app",
   "bundledWebRuntime": false,
   "webDir": "www"

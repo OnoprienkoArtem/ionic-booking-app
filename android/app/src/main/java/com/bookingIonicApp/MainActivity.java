@@ -1,4 +1,4 @@
-package booking.ionic.app;
+package com.bookingIonicApp;
 
 import android.os.Bundle;
 
