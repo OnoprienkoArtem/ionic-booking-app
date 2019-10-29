@@ -49,7 +49,7 @@ export class NewOfferPage implements OnInit {
     }
 
     onLocationPicked(location: PlaceLocation) {
-        this.form.patchValue({ location: location });
+        this.form.patchValue({ location });
     }
 
     onCreateOffer() {
@@ -78,5 +78,8 @@ export class NewOfferPage implements OnInit {
                         this.router.navigate(['/places/tabs/offers']);
                     });
             });
+    }
+
+    onImagePicked(imageDate: string) {
     }
 }
