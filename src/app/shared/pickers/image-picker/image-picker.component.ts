@@ -4,7 +4,8 @@ import {
     Output,
     EventEmitter,
     ViewChild,
-    ElementRef
+    ElementRef,
+    Input
 } from '@angular/core';
 import {
     Plugins,
@@ -13,6 +14,8 @@ import {
     CameraResultType
 } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
+
+const { Camera } = Plugins;
 @Component({
     selector: 'app-image-picker',
     templateUrl: './image-picker.component.html',
@@ -21,6 +24,7 @@ import { Platform } from '@ionic/angular';
 export class ImagePickerComponent implements OnInit {
     @ViewChild('filePicker') filePickerRef: ElementRef<HTMLInputElement>;
     @Output() imagePick = new EventEmitter<string | File>();
+    @Input() showPreview = false;
     selectedImage: string;
     usePicker = false;
 
@@ -28,19 +32,20 @@ export class ImagePickerComponent implements OnInit {
 
     ngOnInit() {
         if (
-            (this.platform.is('mobile') && this.platform.is('hybrid')) ||
+            (this.platform.is('mobile') && !this.platform.is('hybrid')) ||
             this.platform.is('desktop')
         ) {
             this.usePicker = true;
         }
     }
 
-    onPickImage() {
-        if (!Capacitor.isPluginAvailable('Camera') || this.usePicker) {
+    async onPickImage() {
+        if (!Capacitor.isPluginAvailable('Camera')) {
             this.filePickerRef.nativeElement.click();
             return;
         }
-        Plugins.Camera.getPhoto({
+
+        await Camera.getPhoto({
             quality: 50,
             source: CameraSource.Prompt,
             correctOrientation: true,
@@ -49,11 +54,14 @@ export class ImagePickerComponent implements OnInit {
             resultType: CameraResultType.Base64
         })
             .then(image => {
-                this.selectedImage = image.base64Data;
-                this.imagePick.emit(image.base64Data);
+                this.selectedImage = image.base64String;
+                this.imagePick.emit(image.base64String);
             })
             .catch(error => {
                 console.log(error);
+                if (this.usePicker) {
+                    this.filePickerRef.nativeElement.click();
+                }
                 return false;
             });
     }
