@@ -6,6 +6,7 @@ import { take, map, tap, delay, switchMap } from 'rxjs/operators';
 import { Place } from './place.model';
 import { AuthService } from '../auth/auth.service';
 import { PlaceLocation } from './location.model';
+import { FormControl } from '@angular/forms';
 
 interface PlaceData {
     availableFrom: string;
@@ -120,20 +121,31 @@ export class PlacesService {
             );
     }
 
+    uploadImage(image: File) {
+        const uploadData = new FormData();
+        uploadData.append('image', image);
+
+        return this.http.post<{ imageUrl: string; imagePath: string }>(
+            'https://us-central1-ionic-angular-booking-ap-f1811.cloudfunctions.net/storeImage',
+            uploadData
+        );
+    }
+
     addPlace(
         title: string,
         description: string,
         price: number,
         dateFrom: Date,
         dateTo: Date,
-        location: PlaceLocation
+        location: PlaceLocation,
+        imageUrl: string
     ) {
         let generatedId: string;
         const newPlace = new Place(
             Math.random().toString(),
             title,
             description,
-            'https://png.pngtree.com/element_our/md/20180518/md_5afec7ee916c4.jpg',
+            imageUrl,
             price,
             dateFrom,
             dateTo,
