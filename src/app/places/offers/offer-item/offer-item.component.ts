@@ -17,3 +17,4 @@ export class OfferItemComponent implements OnInit {
 
 
 }
+˝
