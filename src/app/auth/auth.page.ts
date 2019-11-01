@@ -50,6 +50,7 @@ export class AuthPage implements OnInit {
       // Send a request to login servers
     } else {
       // Send a request to signup servers
+      this.authService.signup(email, password);
     }
   }
 
