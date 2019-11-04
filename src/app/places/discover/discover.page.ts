@@ -46,11 +46,18 @@ export class DiscoverPage implements OnInit, OnDestroy {
         this.menuCtrl.toggle();
     }
 
-    onFilterUpdate(filter: string) {
-        const isShown = place =>
-            filter === 'all' || place.userId !== this.authService.userId;
-        this.relevantPlaces = this.loadedPlaces.filter(isShown);
-        this.filter = filter;
+    onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
+        this.authService.userId.subscribe(userId => {
+            if (event.detail.value === 'all') {
+                this.relevantPlaces = this.loadedPlaces;
+                this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+            } else {
+                this.relevantPlaces = this.loadedPlaces.filter(
+                    place => place.userId !== userId
+                );
+                this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+            }
+        });
     }
 
     ngOnDestroy() {
