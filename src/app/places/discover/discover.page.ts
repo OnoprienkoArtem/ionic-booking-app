@@ -18,7 +18,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
     relevantPlaces: Place[];
     isLoading = false;
     private placesSub: Subscription;
-    private filter = 'all';
 
     constructor(
         private placesService: PlacesService,
@@ -31,7 +30,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
             this.loadedPlaces = places;
             this.relevantPlaces = this.loadedPlaces;
             this.listedLoadedPlaces = this.relevantPlaces.slice(1);
-            this.onFilterUpdate(this.filter);
         });
     }
 
@@ -47,7 +45,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
     }
 
     onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
-        this.authService.userId.subscribe(userId => {
+        this.authService.userId.pipe(take(1)).subscribe(userId => {
             if (event.detail.value === 'all') {
                 this.relevantPlaces = this.loadedPlaces;
                 this.listedLoadedPlaces = this.relevantPlaces.slice(1);
