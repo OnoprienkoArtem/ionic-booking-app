@@ -130,7 +130,7 @@ export class PlacesService {
                 return this.http.post<{ name: string }>(
                     'https://ionic-angular-booking-ap-f1811.firebaseio.com/offered-places.json',
                     { ...newPlace, id: null }
-                )
+                );
             }),
             switchMap(resData => {
                 generatedId = resData.name;
