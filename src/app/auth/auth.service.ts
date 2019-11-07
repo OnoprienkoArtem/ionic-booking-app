@@ -62,11 +62,27 @@ export class AuthService {
                     token: string;
                     tokenExpirationDate: string;
                     userId: string;
+                    email: string;
                 };
                 const expirationTime = new Date(parsedDate.tokenExpirationDate);
                 if (expirationTime <= new Date()) {
                     return null;
                 }
+                const user = new User(
+                    parsedDate.userId,
+                    parsedDate.email,
+                    parsedDate.token,
+                    expirationTime
+                );
+                return user;
+            }),
+            tap(user => {
+                if (user) {
+                    this._user.next(user);
+                }
+            }),
+            map(user => {
+                return !!user;
             })
         );
     }
@@ -108,16 +124,23 @@ export class AuthService {
         this.storeAuthData(
             userData.localId,
             userData.idToken,
-            expirationTime.toISOString()
+            expirationTime.toISOString(),
+            userData.email
         );
     }
 
     private storeAuthData(
         userId: string,
         token: string,
-        tokenExpirationDate: string
+        tokenExpirationDate: string,
+        email: string
     ) {
-        const data = JSON.stringify({ userId, token, tokenExpirationDate });
+        const data = JSON.stringify({
+            userId,
+            token,
+            tokenExpirationDate,
+            email
+        });
         Plugins.Storage.set({ key: 'authData', value: data });
     }
 }
