@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, from } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Plugins, Capacitor } from '@capacitor/core';
 import { environment } from '../../environments/environment';
@@ -52,6 +52,25 @@ export class AuthService {
 
     constructor(private http: HttpClient) {}
 
+    autoLogin() {
+        return from(Plugins.Storage.get({ key: 'authData' })).pipe(
+            map(storedDate => {
+                if (!storedDate || !storedDate.value) {
+                    return null;
+                }
+                const parsedDate = JSON.parse(storedDate.value) as {
+                    token: string;
+                    tokenExpirationDate: string;
+                    userId: string;
+                };
+                const expirationTime = new Date(parsedDate.tokenExpirationDate);
+                if (expirationTime <= new Date()) {
+                    return null;
+                }
+            })
+        );
+    }
+
     signup(email: string, password: string) {
         return this.http
             .post<AuthResponseData>(
@@ -86,7 +105,11 @@ export class AuthService {
                 expirationTime
             )
         );
-        this.storeAuthData(userData.localId, userData.idToken, expirationTime.toISOString());
+        this.storeAuthData(
+            userData.localId,
+            userData.idToken,
+            expirationTime.toISOString()
+        );
     }
 
     private storeAuthData(
