@@ -67,6 +67,7 @@ export class AuthPage implements OnInit {
         const password = form.value.password;
 
         this.authenticate(email, password);
+        form.reset();
     }
 
     onSwitchAuthModel() {

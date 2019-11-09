@@ -15,6 +15,7 @@ import { AuthService } from './auth/auth.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
     private authSub: Subscription;
+    private previousAuthState = false;
 
     constructor(
         private platform: Platform,
@@ -39,9 +40,10 @@ export class AppComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.authSub = this.authService.userIsAuthenticated.subscribe(
             isAuth => {
-                if (!isAuth) {
+                if (!isAuth && this.previousAuthState !== isAuth) {
                     this.router.navigateByUrl('/auth');
                 }
+                this.previousAuthState = isAuth;
             }
         );
     }
