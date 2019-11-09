@@ -20,11 +20,7 @@ export interface AuthResponseData {
 })
 export class AuthService {
     // tslint:disable-next-line: variable-name
-    // private _userIsAuthenticated = false;
-    // tslint:disable-next-line: variable-name
     private _user = new BehaviorSubject<User>(null);
-    // tslint:disable-next-line: variable-name
-    // private _token = new BehaviorSubject<string>();
 
     get userIsAuthenticated() {
         return this._user.asObservable().pipe(
@@ -107,6 +103,7 @@ export class AuthService {
 
     logout() {
         this._user.next(null);
+        Plugins.Storage.remove({ key: 'authData' });
     }
 
     private setUserData(userData: AuthResponseData) {
