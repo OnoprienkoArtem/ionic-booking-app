@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, from } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -18,9 +18,10 @@ export interface AuthResponseData {
 @Injectable({
     providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
     // tslint:disable-next-line: variable-name
     private _user = new BehaviorSubject<User>(null);
+    private activeLogoutTimer: any;
 
     get userIsAuthenticated() {
         return this._user.asObservable().pipe(
@@ -102,8 +103,26 @@ export class AuthService {
     }
 
     logout() {
+        if (this.activeLogoutTimer) {
+            clearTimeout(this.activeLogoutTimer);
+        }
         this._user.next(null);
         Plugins.Storage.remove({ key: 'authData' });
+    }
+
+    ngOnDestroy() {
+        if (this.activeLogoutTimer) {
+            clearTimeout(this.activeLogoutTimer);
+        }
+    }
+
+    private autoLogout(duration: number) {
+        if (this.activeLogoutTimer) {
+            clearTimeout(this.activeLogoutTimer);
+        }
+        this.activeLogoutTimer = setTimeout(() => {
+            this.logout();
+        }, duration);
     }
 
     private setUserData(userData: AuthResponseData) {
