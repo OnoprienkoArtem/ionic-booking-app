@@ -76,6 +76,7 @@ export class AuthService implements OnDestroy {
             tap(user => {
                 if (user) {
                     this._user.next(user);
+                    this.autoLogout(user.tokenDuration);
                 }
             }),
             map(user => {
@@ -129,14 +130,14 @@ export class AuthService implements OnDestroy {
         const expirationTime = new Date(
             new Date().getTime() + +userData.expiresIn * 1000
         );
-        this._user.next(
-            new User(
-                userData.localId,
-                userData.email,
-                userData.idToken,
-                expirationTime
-            )
+        const user = new User(
+            userData.localId,
+            userData.email,
+            userData.idToken,
+            expirationTime
         );
+        this._user.next(user);
+        this.autoLogout(user.tokenDuration);
         this.storeAuthData(
             userData.localId,
             userData.idToken,
