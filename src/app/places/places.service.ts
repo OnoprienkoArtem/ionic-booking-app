@@ -197,7 +197,7 @@ export class PlacesService {
                     oldPlace.location
                 );
                 return this.http.put(
-                    `https://ionic-angular-booking-ap-f1811.firebaseio.com/offered-places/${placeId}.json`,
+                    `https://ionic-angular-booking-ap-f1811.firebaseio.com/offered-places/${placeId}.json?auth=${fetchedToken}`,
                     { ...updatedPlaces[updatedPlaceIndex], id: null }
                 );
             }),
