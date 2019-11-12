@@ -4,9 +4,10 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
-import { Plugins, Capacitor } from '@capacitor/core';
+import { Plugins, Capacitor, AppState } from '@capacitor/core';
 
 import { AuthService } from './auth/auth.service';
+import { take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -46,6 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.previousAuthState = isAuth;
             }
         );
+        Plugins.App.addListener(
+            'appStateChange',
+            this.checkAuthOnResume.bind(this)
+        );
     }
 
     onLogout() {
@@ -55,6 +60,20 @@ export class AppComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         if (this.authSub) {
             this.authSub.unsubscribe();
+        }
+        Plugins.App.removeListener('appStateChange', this.checkAuthOnResume);
+    }
+
+    private checkAuthOnResume(state: AppState) {
+        if (state.isActive) {
+            this.authService
+                .autoLogin()
+                .pipe(take(1))
+                .subscribe(success => {
+                    if (!success) {
+                        this.onLogout();
+                    }
+                });
         }
     }
 }
