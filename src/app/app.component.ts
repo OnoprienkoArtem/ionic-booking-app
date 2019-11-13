@@ -61,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
         if (this.authSub) {
             this.authSub.unsubscribe();
         }
-        Plugins.App.removeListener('appStateChange', this.checkAuthOnResume);
+        // Plugins.App.removeListener('appStateChange', this.checkAuthOnResume);
     }
 
     private checkAuthOnResume(state: AppState) {

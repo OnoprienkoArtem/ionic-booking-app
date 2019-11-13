@@ -7,7 +7,6 @@ import { Place } from './place.model';
 import { AuthService } from '../auth/auth.service';
 import { PlaceLocation } from './location.model';
 import { FormControl } from '@angular/forms';
-import { threadId } from 'worker_threads';
 
 interface PlaceData {
     availableFrom: string;

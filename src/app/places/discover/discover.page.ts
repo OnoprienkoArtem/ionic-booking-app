@@ -50,11 +50,15 @@ export class DiscoverPage implements OnInit, OnDestroy {
             if (event.detail.value === 'all') {
                 this.relevantPlaces = this.loadedPlaces;
                 this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+                console.log('all - relevantPlaces', this.relevantPlaces);
+                console.log('all - listedLoadedPlaces', this.listedLoadedPlaces);
             } else {
                 this.relevantPlaces = this.loadedPlaces.filter(
                     place => place.userId !== userId
                 );
                 this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+                console.log('bookable - relevantPlaces', this.relevantPlaces);
+                console.log('bookable - listedLoadedPlaces', this.listedLoadedPlaces);
             }
         });
     }
