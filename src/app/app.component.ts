@@ -47,10 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.previousAuthState = isAuth;
             }
         );
-        Plugins.App.addListener(
-            'appStateChange',
-            this.checkAuthOnResume.bind(this)
-        );
+        // Plugins.App.addListener(
+        //     'appStateChange',
+        //     this.checkAuthOnResume.bind(this)
+        // );
     }
 
     onLogout() {
